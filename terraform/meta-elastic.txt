@@ -1,0 +1,10 @@
+#cloud-config
+serial-port-enable: 1
+users:
+  - name: admin
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+2EjU1w0AS8JT3njDHjH4ENlQbejD19dS5AdJqZP6U alexg@DESKTOP-VJGVVAG
+

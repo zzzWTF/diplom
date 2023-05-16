@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  kibana:
+    image: bitnami/kibana:latest
+    ports:
+      - "5601:5601"

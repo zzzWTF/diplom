@@ -1,0 +1,62 @@
+---
+- name: Install the latest version of node-exporter
+  hosts: webServer
+  remote_user: admin
+  become: yes
+  gather_facts: no
+  
+  tasks:
+  - name: Installing wget
+    ansible.builtin.apt:
+      name: wget
+      state: latest
+  - name: Create User nodeusr
+    user:
+      name: nodeusr
+      create_home: no
+      shell: /bin/false
+  - name: Copy prometheus-node-exporter
+    ansible.builtin.copy:
+      src: ./packages/node_exporter
+      dest: /usr/local/bin/
+  - name: Change owner for node_exporter
+    file:
+      path: /usr/local/bin/node_exporter
+      state: file
+      owner: nodeusr
+      group: nodeusr
+  - name: Change perm
+    file:
+      file: dest=/usr/local/bin/node_exporter mode=a+x
+  - name: Create File for node_exporter Systemd
+    template:
+      src=./packages/node_exporter.service
+      dest=/etc/systemd/system/
+  - name: Copy prometheus nginxlog exporter
+    ansible.builtin.copy:
+      src: ./packages/prometheus-nginxlog-exporter_1.9.2_linux_amd64.deb
+      dest: /tmp/
+  - name: Install prometheus nginxlog exporter
+    ansible.builtin.apt:
+      deb: /tmp/prometheus-nginxlog-exporter_1.9.2_linux_amd64.deb
+    ansible.builtin.copy:
+      src: ./packages/prometheus-nginxlog-exporter.hcl
+      dest: /etc/prometheus-nginxlog-exporter.hcl
+  - name: Create File for nginx node_exporter Systemd
+    template:
+      src=./packages/prometheus-nginxlog-exporter.service
+      dest=/etc/systemd/system/
+
+  - name: systemd reload
+    systemd:
+      daemon_reload: yes
+  - name: Systemctl node_exporter Start
+    systemd:
+      name: node_exporter
+      state: started
+      enabled: yes
+  - name: Systemctl prometheus-nginxlog-exporter Start
+    systemd:
+      name: prometheus-nginxlog-exporter
+      state: started
+      enabled: yes

@@ -1,0 +1,7 @@
+---
+
+- hosts: prometheus
+  user: admin
+  become: true
+  roles:
+    - role: Prometheus

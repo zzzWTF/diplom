@@ -1,0 +1,4 @@
+---
+
+prometheus_version: "2.43.1"
+alertmanager_version: "0.25.0"

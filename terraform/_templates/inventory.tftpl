@@ -1,0 +1,32 @@
+[${groupname_Web}]
+${ip_Web01}
+${ip_Web02}
+
+[${groupname_ELK}]
+${ip_ELK}
+
+[${groupname_Prometheus}]
+${ip_Prometheus}
+
+[${groupname_Bastion}]
+${ip_Bastion}
+
+[${groupname_Grafana}]
+${ip_Grafana}
+
+[${groupname_Kibana}]
+${ip_Kibana}
+
+[proxy:children]
+${groupname_Web}
+${groupname_ELK}
+${groupname_Prometheus}
+${groupname_Grafana}
+${groupname_Kibana}
+
+[all:vars]
+ansible_user = ${user}
+ansible_ssh_private_key_file=./key/id_ed25519
+
+[proxy:vars]
+ansible_ssh_common_args='-J bastion'

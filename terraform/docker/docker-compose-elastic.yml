@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: bitnami/elasticsearch:latest
+    environment:
+      ES_JAVA_OPTS: "-Xm4g -Xms4g"
+      ELASTIC_USERNAME: "elastic"
+      ELASTIC_PASSWORD: "MyPw123"
+      discovery.type: single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"

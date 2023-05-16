@@ -1,0 +1,16 @@
+---
+- name: Config web servers
+  hosts: webServer
+  remote_user: admin
+  become: yes
+  gather_facts: no
+
+  tasks:
+  - name: Write site files
+    ansible.builtin.copy:
+      src: ./html/index.nginx-debian.html
+      dest: /var/www/html
+  - name: Restart Nginx
+    service:
+      name: nginx
+      state: restarted
